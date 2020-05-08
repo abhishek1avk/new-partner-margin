@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>AW_Margin__c</fullName>
+        <externalId>false</externalId>
+        <label>Architectural Workshop Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Allow_Margin_Override__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Allow Margin Override</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Fulfilment_Margin__c</fullName>
+        <externalId>false</externalId>
+        <label>Fulfilment Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Model_Type_Partner__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Program</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>Model_Type</valueSetName>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>POV_Margin__c</fullName>
+        <description>This field is used to provide POV Margin Discount on Quotes</description>
+        <externalId>false</externalId>
+        <label>POV Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_Summit_Deg_Reg_Margin__c</fullName>
+        <externalId>false</externalId>
+        <label>Deal Reg Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_Tier__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Tier</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Zenith</fullName>
+                    <default>false</default>
+                    <label>Zenith</label>
+                </value>
+                <value>
+                    <fullName>Alpine</fullName>
+                    <default>false</default>
+                    <label>Alpine</label>
+                </value>
+                <value>
+                    <fullName>Base Camp</fullName>
+                    <default>false</default>
+                    <label>Base Camp</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <validationRules>
+        <fullName>Lock_Margin_Update</fullName>
+        <active>true</active>
+        <errorConditionFormula>(ISCHANGED(Partner_Summit_Deg_Reg_Margin__c) || ISCHANGED(POV_Margin__c) || ISCHANGED(AW_Margin__c) || ISCHANGED(Fulfilment_Margin__c)) &amp;&amp; NOT(Allow_Margin_Override__c)</errorConditionFormula>
+        <errorMessage>Partner Margins cannot be modified. Please reach out to Deal Desk.</errorMessage>
+    </validationRules>
+</CustomObject>

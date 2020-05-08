@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Co_Sell_Partner_Modified__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Co Sell Partner Modified?</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>APTSCU_Accept__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF (
+	ISPICKVAL(Apttus_Proposal__Approval_Stage__c, &quot;Presented&quot;), 
+	/*IF(
+		Block_Old_DAS__c || ((Needs_Repricing__c || CONTAINS( Line_Item_SKU__c , &apos;ZSUITE&apos;) ||  Price_List_Name__c == &apos;ZScaler FY2017 Price List&apos;) &amp;&amp; NOT(Ignore_Quote_Reprice_Pricelist_Switch__c)),
+	*/
+		HYPERLINK(&quot;/apex/Confirm_Reprice?confirmrepricequoteid=&quot; +Id+&apos;&amp;retURL=/apex/APTSCU_AcceptProposal?id=&apos;+Id, IMAGE(&quot;/resource/Apttus_QPConfig__Button_Accept&quot;, &quot;Accept&quot;),&quot;_self&quot;),
+	/*	
+		HYPERLINK(&quot;/apex/APTSCU_AcceptProposal?id=&quot;&amp;Id, IMAGE(&quot;/resource/Apttus_QPConfig__Button_Accept&quot;, &quot;Accept&quot;),&quot;_self&quot;)
+	), */ NULL
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Accept</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>APTSCU_Make_Primary__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF (
+	AND(
+		LEN(Apttus_Proposal__Opportunity__c ) &gt; 0, NOT (Apttus_Proposal__Primary__c)
+	), 
+	/*IF(
+		Block_Old_DAS__c || ((Needs_Repricing__c || CONTAINS( Line_Item_SKU__c , &apos;ZSUITE&apos;) || Price_List_Name__c == &apos;ZScaler FY2017 Price List&apos;) &amp;&amp; NOT(Ignore_Quote_Reprice_Pricelist_Switch__c)), 
+	*/	
+		HYPERLINK(&quot;/apex/Confirm_Reprice?backtoVF=true&amp;confirmrepricequoteid=&quot; +Id+&apos;&amp;retURL=/apex/APTSCU_MakeProposalPrimary?id=&apos;&amp;Id, IMAGE(&quot;/resource/Apttus_Proposal__Button_MakePrimary&quot;, &quot;Make Primary&quot;),&quot;_self&quot;),
+	/*	
+		HYPERLINK(&quot;/apex/APTSCU_MakeProposalPrimary?id=&quot;&amp;Id, IMAGE(&quot;/resource/Apttus_Proposal__Button_MakePrimary&quot;, &quot;Make Primary&quot;),&quot;_self&quot;)
+	), */ 
+	NULL
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Make Primary</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>APTS_Configure_Products__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+/*IF CONDITION 1*/   
+   AND(
+       LEN(Apttus_QPConfig__PriceListId__c) &gt; 0,
+       NOT(ISBLANK( Apttus_QPConfig__BillToAccountId__r.Name)),
+       NOT(
+           OR(IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;In Review&apos;),      
+              IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Approval In Progress&apos;),    
+              IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Accepted&apos;) 
+             )
+          )
+      ),
+/*TRUE
+ IF(Block_Old_DAS__c || 
+ ((Needs_Repricing__c || 
+ CONTAINS( Line_Item_SKU__c , &apos;ZSUITE&apos;) || 
+ Price_List_Name__c == &apos;ZScaler FY2017 Price List&apos;) 
+ &amp;&amp; NOT(Ignore_Quote_Reprice_Pricelist_Switch__c)),
+*/  
+ HYPERLINK(&quot;/apex/Confirm_Reprice?backtoVF=true&amp;confirmrepricequoteid=&quot; +Id+&apos;&amp;retURL=/apex/Apttus_QPAsset__ProposalConfiguration?flow=&apos;+SelectedFlow__c+&apos;&amp;mode=addon&amp;id=&apos;+Id, IMAGE(&quot;/resource/Apttus_QPConfig__Button_Configure&quot;, &quot;Configure Products&quot;),&quot;_self&quot;),
+ /*
+ HYPERLINK(&quot;/apex/Apttus_QPAsset__ProposalConfiguration?flow=&quot;+SelectedFlow__c+&quot;&amp;id=&quot; &amp;Id+&apos;&amp;mode=addon&apos;, IMAGE(&quot;/resource/Apttus_QPConfig__Button_Configure&quot;, &quot;Configure Products&quot;),&quot;_self&quot;)) ,
+FALSE*/
+NULL
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Configure Products</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>APTS_Generate__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( 
+	AND( 
+		NOT( 
+			OR(
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Draft&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Approval Required&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;In Review&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Approval In Progress&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Denied&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Rejected&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Cancelled&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Accepted&apos;)
+			)
+		),
+		NOT(Preview_Generate_Skip_Check__c)
+	), 
+	/*IF(
+		Block_Old_DAS__c || ((Needs_Repricing__c || CONTAINS( Line_Item_SKU__c , &apos;ZSUITE&apos;) || Price_List_Name__c == &apos;ZScaler FY2017 Price List&apos;) &amp;&amp; NOT(Ignore_Quote_Reprice_Pricelist_Switch__c)), 
+	*/	
+		HYPERLINK(&quot;/apex/Confirm_Reprice?confirmrepricequoteid=&quot; +Id+&apos;&amp;retURL=/apex/Apttus_Proposal__ProposalGenerate?id=&apos;&amp;Id , IMAGE(&quot;/resource/Apttus_Proposal__Button_Generate&quot;, &quot;Generate&quot;),&quot;_self&quot;),
+	/*	
+		HYPERLINK(&quot;/apex/Apttus_Proposal__ProposalGenerate?id=&quot;&amp;Id , IMAGE(&quot;/resource/Apttus_Proposal__Button_Generate&quot;, &quot;Generate&quot;),&quot;_self&quot;)
+		), */ 
+	NULL
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Generate</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>APTS_Present__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( 
+	AND( 
+		NOT( 
+			OR(
+				IsPickVal(Apttus_Proposal__Approval_Stage__c,&apos;Draft&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Approval Required&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;In Review&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Approval In Progress&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Approved&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Accepted&apos;)
+			) 
+		)
+	), 
+	/* IF(
+		Block_Old_DAS__c || ((Needs_Repricing__c || CONTAINS( Line_Item_SKU__c , &apos;ZSUITE&apos;) || Price_List_Name__c == &apos;ZScaler FY2017 Price List&apos;) &amp;&amp; NOT(Ignore_Quote_Reprice_Pricelist_Switch__c)), 
+	*/	
+		HYPERLINK(&quot;/apex/Confirm_Reprice?confirmrepricequoteid=&quot; +Id+&apos;&amp;retURL=/apex/Apttus_Proposal__ProposalPresent?id=&apos;+Id, IMAGE(&quot;/resource/Apttus_Proposal__Button_Present&quot;, &quot;Present&quot;),&quot;_self&quot;),
+	/*	
+		HYPERLINK(&quot;/apex/Apttus_Proposal__ProposalPresent?id=&quot;&amp;Id, IMAGE(&quot;/resource/Apttus_Proposal__Button_Present&quot;, &quot;Present&quot;),&quot;_self&quot;)
+	), */ 
+	NULL
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Present</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>APTS_Preview__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+	AND( 
+		NOT(
+			OR(
+				IsPickVal(Apttus_Proposal__Approval_Stage__c,&apos;Approved&apos;),
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Generated&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Presented&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Accepted&apos;)
+			)
+		),
+		NOT(Preview_Generate_Skip_Check__c)
+	), 
+	/*IF(
+		Block_Old_DAS__c || ((Needs_Repricing__c || CONTAINS( Line_Item_SKU__c , &apos;ZSUITE&apos;) || Price_List_Name__c == &apos;ZScaler FY2017 Price List&apos;) &amp;&amp; NOT(Ignore_Quote_Reprice_Pricelist_Switch__c)), 
+	*/	
+		HYPERLINK(&quot;/apex/Confirm_Reprice?backtoVF=true&amp;confirmrepricequoteid=&quot; +Id+&apos;&amp;retURL=/apex/Apttus_Proposal__ProposalGenerate?action=Preview&amp;id=&apos;+Id, IMAGE(&quot;/resource/Apttus_Proposal__Button_Preview&quot;, &quot;Preview&quot;),&quot;_self&quot;),
+	/*	
+		HYPERLINK(&quot;/apex/Apttus_Proposal__ProposalGenerate?id=&quot;&amp;Id &amp; &quot;&amp;action=Preview&quot;, IMAGE(&quot;/resource/Apttus_Proposal__Button_Preview&quot;, &quot;Preview&quot;),&quot;_self&quot;)
+	),*/ 
+	NULL
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Preview</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>AW__c</fullName>
+        <externalId>false</externalId>
+        <formula>Apttus_QPConfig__BillToAccountId__c  =  Apttus_Proposal__Opportunity__r.Architectural_Workshop_Margin__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Architectural Workshop Margin</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Deal_Reg_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>Apttus_QPConfig__BillToAccountId__c  = Apttus_Proposal__Opportunity__r.Deal_Reg_Margin__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Deal Reg Margin</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Generate_Excel__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+	AND( 
+		NOT(
+			OR(
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Draft&apos;),  
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Approval Required&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Approval In Progress&apos;),
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;In Review&apos;),  
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Denied&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Rejected&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Cancelled&apos;), 
+				IsPickVal(Apttus_Proposal__Approval_Stage__c, &apos;Accepted&apos;)
+			)
+		)
+	),
+	/*IF(
+		Block_Old_DAS__c || ((Needs_Repricing__c || CONTAINS( Line_Item_SKU__c , &apos;ZSUITE&apos;) || Price_List_Name__c == &apos;ZScaler FY2017 Price List&apos;) &amp;&amp; NOT(Ignore_Quote_Reprice_Pricelist_Switch__c)), 
+	*/	
+		HYPERLINK(&quot;/apex/Confirm_Reprice?confirmrepricequoteid=&quot; +Id+&apos;&amp;retURL=https://apttus-xapps.na5.visual.force.com/apex/EditInExcelLaunch?appName=App&amp;parentRecordId=&apos;+Id,IMAGE(&quot;/resource/GenerateExcel&quot;,&quot;Generate Excel&quot;),&quot;_self&quot;),
+	/*	
+		HYPERLINK(&quot;https://apttus-xapps.na5.visual.force.com/apex/EditInExcelLaunch?parentRecordId=&quot;&amp;Id+&apos;&amp;appName=App&apos;,IMAGE(&quot;/resource/GenerateExcel&quot;,&quot;Generate Excel&quot;),&quot;_self&quot;)
+	), */ 
+	NULL
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Generate Excel</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Model_Type_Partner__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Program</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>Model_Type</valueSetName>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Net_Price_Label_Template__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( ISPICKVAL(Model_Type_Partner__c , &apos;Partner Summit&apos;), &apos;MSRP&apos;, &apos;$ Net&apos;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Net Price Label - Template</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>POV_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>Apttus_QPConfig__BillToAccountId__c  =  Apttus_Proposal__Opportunity__r.POV_Margin__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>POV Margin</label>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>SelectedFlow__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL(Model_Type_Partner__c, &apos;Partner Summit&apos;) ,
+IF(RecordType.Name = &apos;Renewal&apos;,
+IF( Apttus_Proposal__Opportunity__r.Partner_Margin_Adjustment__c = TRUE,&apos;PartnerSummitWith_Adj_Renewal&apos;,&apos;PartnerSummitWithout_Adj_Renewal&apos;),
+IF( Apttus_Proposal__Opportunity__r.Partner_Margin_Adjustment__c = TRUE,&apos;PartnerSummitWithAdjustment_NewUpsell&apos;,&apos;PartnerSummit_Without_Adjustment&apos;)),
+IF(RecordType.Name = &apos;Renewal&apos;,&apos;Renewals&apos;, &apos;NewUpsell&apos;)
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>SelectedFlow</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Deal_Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>((Total_List_Price_Without_Credit__c- Total_Net_to_Zscaler__c)/Total_List_Price_Without_Credit__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Deal Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Total_Stackable_Margin__c</fullName>
+        <externalId>false</externalId>
+        <formula>((APTS_Proposal_Net_Price__c- Total_Net_to_Zscaler__c)/APTS_Proposal_Net_Price__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Total Stackable Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Percent</type>
+    </fields>
+    <webLinks>
+        <fullName>Submit_Recall_Approvals_New</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Submit / Recall Approvals</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&quot;/soap/ajax/36.0/connection.js&quot;)}
+
+if ({!Apttus_Proposal__Proposal__c.Old_Approval_Process__c}) {
+    var redirectTo = &apos;&apos;;
+	
+    /*if ({!Apttus_Proposal__Proposal__c.Block_Old_DAS__c
+	} || (({!Apttus_Proposal__Proposal__c.Needs_Repricing__c} || {!Apttus_Proposal__Proposal__c.Must_Switch_PriceList__c}) &amp;&amp; {!NOT(Apttus_Proposal__Proposal__c.Ignore_Quote_Reprice_Pricelist_Switch__c)})) {
+	*/
+	
+    redirectTo = &apos;/apex/Confirm_Reprice?confirmrepricequoteid={!Apttus_Proposal__Proposal__c.Id}&amp;retURL=/apex/Apttus_Approval__PreviewSubmitApprovals?id={!Apttus_Proposal__Proposal__c.APTS_Configuration_Id__c}&amp;returnId={!Apttus_Proposal__Proposal__c.Id}&amp;hideSubmitWithAttachments=True&amp;headerSObjectId={!Apttus_Proposal__Proposal__c.Id}&amp;attachmentsParentId={!Apttus_Proposal__Proposal__c.Id}&apos;;
+    
+	/*}else {
+        redirectTo = &apos;/apex/Apttus_Approval__PreviewSubmitApprovals?id={!Apttus_Proposal__Proposal__c.APTS_Configuration_Id__c}&amp;returnId={!Apttus_Proposal__Proposal__c.Id}&amp;hideSubmitWithAttachments=True&amp;headerSObjectId={!Apttus_Proposal__Proposal__c.Id}&amp;attachmentsParentId={!Apttus_Proposal__Proposal__c.Id}&apos;;
+    } */
+	
+    window.parent.location.replace(redirectTo);
+}else {
+    var redirectTo = &apos;&apos;;
+	
+    /* if ({!Apttus_Proposal__Proposal__c.Block_Old_DAS__c
+	} || (({!Apttus_Proposal__Proposal__c.Needs_Repricing__c} || {!Apttus_Proposal__Proposal__c.Must_Switch_PriceList__c}) &amp;&amp; {!NOT(Apttus_Proposal__Proposal__c.Ignore_Quote_Reprice_Pricelist_Switch__c)})) {
+	*/
+    
+	redirectTo = &apos;/apex/Confirm_Reprice?confirmrepricequoteid={!Apttus_Proposal__Proposal__c.Id}&amp;retURL=/apex/Apttus_Approval__PreviewSubmitApprovals?id={!Apttus_Proposal__Proposal__c.Id}&amp;returnId={!Apttus_Proposal__Proposal__c.Id}&amp;hideSubmitWithAttachments=True&amp;headerSObjectId={!Apttus_Proposal__Proposal__c.Id}&amp;attachmentsParentId={!Apttus_Proposal__Proposal__c.Id}&apos;;
+    
+	/*}else {
+        redirectTo = &apos;/apex/Apttus_Approval__PreviewSubmitApprovals?id={!Apttus_Proposal__Proposal__c.Id}&amp;returnId={!Apttus_Proposal__Proposal__c.Id}&amp;hideSubmitWithAttachments=True&amp;headerSObjectId={!Apttus_Proposal__Proposal__c.Id}&amp;attachmentsParentId={!Apttus_Proposal__Proposal__c.Id}&apos;;
+    }
+    */
+	
+    window.parent.location.replace(redirectTo);
+}</url>
+    </webLinks>
+</CustomObject>

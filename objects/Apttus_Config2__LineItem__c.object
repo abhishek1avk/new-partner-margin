@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <fields>
+        <fullName>AW_Margin_Formula__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(AND(Apttus_Config2__ProductId__r.AW__c=TRUE,Apttus_Config2__ConfigurationId__r.Apttus_QPConfig__Proposald__r.AW__c = TRUE,OR(ISPICKVAL(Apttus_Config2__LineStatus__c,&apos;New&apos;),ISPICKVAL(Apttus_Config2__LineStatus__c,&apos;Upgraded&apos;))),Apttus_Config2__ConfigurationId__r.Apttus_QPConfig__Proposald__r.Apttus_QPConfig__BillToAccountId__r.AW_Margin__c ,0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>AW Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Fulfilment__c</fullName>
+        <externalId>false</externalId>
+        <formula>If(Apttus_Config2__ProductId__r.Fulfilment_Margin__c == true, Apttus_Config2__ConfigurationId__r.Apttus_QPConfig__Proposald__r.Apttus_QPConfig__BillToAccountId__r.Fulfilment_Margin__c,0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Fulfilment Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Net_to_Zscaler__c</fullName>
+        <externalId>false</externalId>
+        <label>Net to Zscaler</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>POV__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(AND(Apttus_Config2__ConfigurationId__r.Apttus_QPConfig__Proposald__r.POV_Margin__c = TRUE,Apttus_Config2__ProductId__r.POV__c=TRUE,OR(ISPICKVAL(Apttus_Config2__LineStatus__c,&apos;New&apos;),ISPICKVAL(Apttus_Config2__LineStatus__c,&apos;Upgraded&apos;))) , Apttus_Config2__ConfigurationId__r.Apttus_QPConfig__Proposald__r.Apttus_QPConfig__BillToAccountId__r.POV_Margin__c, 0)</formula>
+        <label>POV Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_Adjustment_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Adjustment Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>% Discount</fullName>
+                    <default>true</default>
+                    <label>% Discount</label>
+                </value>
+                <value>
+                    <fullName>Price Override</fullName>
+                    <default>false</default>
+                    <label>Price Override</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Partner_Adjustment__c</fullName>
+        <externalId>false</externalId>
+        <label>Partner Adjustment</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_Summit_Deal_Reg__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(AND(Apttus_Config2__ConfigurationId__r.Apttus_QPConfig__Proposald__r.Deal_Reg_Margin__c = TRUE,Apttus_Config2__ProductId__r.PS_Deal_Reg__c=TRUE,OR(ISPICKVAL(Apttus_Config2__LineStatus__c,&apos;New&apos;),ISPICKVAL(Apttus_Config2__LineStatus__c,&apos;Upgraded&apos;))), Apttus_Config2__ConfigurationId__r.Apttus_QPConfig__Proposald__r.Apttus_QPConfig__BillToAccountId__r.Partner_Summit_Deg_Reg_Margin__c, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Deal Reg Margin</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Total_Zscaler_Discount__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(Apttus_Config2__BaseExtendedPrice__c &lt;&gt; Net_to_Zscaler__c ,( Apttus_Config2__BaseExtendedPrice__c - Net_to_Zscaler__c ) / Apttus_Config2__BaseExtendedPrice__c * 100,0)</formula>
+        <label>Total Zscaler Discount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+</CustomObject>
